@@ -11,11 +11,12 @@ int main(){
 	head->data=1;
 	head->next=NULL;
 	now=head;
-	for(int i=2;i<n;i++){
+	for(int i=2;i<=n;i++){
 		p=new node;
 		p->data=i;
 		p->next=NULL;
 		now->next=p;
+		now=p;
 	}
 	now->next=head;
 	prev=now,now=head;
