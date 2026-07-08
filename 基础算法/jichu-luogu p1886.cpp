@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
-const int N=1000005;
+const dp[1000005];
 int a[N];
 deque<int>q;
 int main(){
