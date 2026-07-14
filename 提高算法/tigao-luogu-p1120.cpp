@@ -7,9 +7,11 @@ bool cmp(int x,int y){
 	return x>y;
 }
 bool dfs(int cur_len,int cnt,int idx,int target,int num,int remain){
-    if(cnt==num) return true;
+	if(cnt==num) return true;
     if(cur_len==target)
       return dfs(0,cnt+1,0,target,num,remain);
+	if (remain < target - cur_len) return false;
+    if (cur_len == 0 && remain < target) return false;
     int fail=-1;
     for(int i=idx;i<n;++i){
 		if(used[i])continue;
