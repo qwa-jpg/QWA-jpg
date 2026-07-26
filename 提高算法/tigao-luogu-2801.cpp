@@ -59,7 +59,7 @@ int main(){
             update(l,r,w);
         }else{
             scanf("%d%d%d",&l,&r,&c);
-            printf("%d\n",query(l,r,c));
+            printf("%d\\n",query(l,r,c));
         }
     }
     return 0;
