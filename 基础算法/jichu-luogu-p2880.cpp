@@ -35,3 +35,5 @@ int main(){
 	}
 	return 0;
 }
+//一个区间的头尾分别最为另外两个区间的头尾
+//ST算法核心递增公式：dp_max[s][k]=max(dp_max[s][k-1],dp_max[s+(1<<(k-1))][k-1]);
