@@ -1,16 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 int a[9][9],ans=-1;
-int sco[9][9]={
-6,6,6,6,6,6,6,6,6,
-6,7,7,7,7,7,7,7,6,
-6,7,8,8,8,8,8,7,6,
-6,7,8,9,9,9,8,7,6,
-6,7,8,9,10,9,8,7,6,
-6,7,8,9,9,9,8,7,6,
-6,7,8,8,8,8,8,7,6,
-6,7,7,7,7,7,7,7,6,
-6,6,6,6,6,6,6,6,6};
+int sco[9][9];
 int row[9],col[9],blk[9];
 int bitcnt[1<<9],lg[1<<9];
 int getblk(int x,int y){return x/3*3+y/3;}
@@ -36,6 +27,12 @@ void dfs(int cnt,int cur){
     }
 }
 int main(){
+	int sco[9][9];
+	for (int i = 0; i < 9; ++i)
+	    for (int j = 0; j < 9; ++j) {
+	        int d = min({i, j, 8 - i, 8 - j});
+	        sco[i][j] = 6 + min(d, 4);
+	    }
     for(int i=0;i<9;++i)for(int j=0;j<9;++j)scanf("%d",&a[i][j]);
     for(int i=0;i<9;++i)row[i]=col[i]=blk[i]=(1<<9)-1;
     for(int i=0;i<(1<<9);++i)bitcnt[i]=bitcnt[i>>1]+(i&1);
