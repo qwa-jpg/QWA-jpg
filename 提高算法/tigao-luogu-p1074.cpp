@@ -46,6 +46,6 @@ int main(){
         ++cnt;
     }
     dfs(cnt,ini);
-    printf("%d\\\\n",ans);
+    printf("%d\n",ans);
     return 0;
 }
