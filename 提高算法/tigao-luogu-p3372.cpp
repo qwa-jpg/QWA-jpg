@@ -32,3 +32,5 @@ int main(){
     }
     return 0;
 }
+//Q:求和区间，区间各数加d
+//sum(L-R)=sum(1,R)-sum(1,L-1);只要求sum即可
