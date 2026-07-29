@@ -43,10 +43,16 @@ int astar(int s,int t,int k){
     memset(times,0,sizeof(times));
     priority_queue<point>q;
     q.push(point(s,0,0));
+    int best_k=INF;
     while(!q.empty()){
         point p=q.top();q.pop();
+		if(times[p.v] > k) continue;//超过k次不在扩展邻边
+		if(p.g + p.h >= best_k) continue;//剪掉
         times[p.v]++;
-        if(times[p.v]==k&&p.v==t)return p.g+p.h;
+        if(p.v == t) {
+		    if(times[p.v] == k) return p.g;//第k次出队,直接返回答案
+		    best_k = p.g;//否则更新当前第i短路长度
+		}
         for(int i=0;i<G[p.v].size();i++){
             edge y=G[p.v][i];
             q.push(point(y.to,p.g+y.w,dist[y.to]));
@@ -67,6 +73,9 @@ int main(){
     scanf("%d%d%d",&s,&t,&k);
     if(s==t)k++;
     dijkstra(t);
-    printf("%d\\n",astar(s,t,k));
+    printf("%d\n",astar(s,t,k));
     return 0;
 }
+//Q:实现寻找每一个k最短路径
+/*A:用启发函数，f(v)=g(v)+h(v);这里设计h(v)为当前节点v到终点t的最短路径
+采用disjkstra(t)实现，另外，这里的还有剪枝,均在批注处*/
