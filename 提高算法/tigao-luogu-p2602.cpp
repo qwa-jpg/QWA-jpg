@@ -4,7 +4,7 @@ typedef long long ll;
 const int N=15;
 ll dp[N][N];
 int num[N],now;
-ll dfs(int pos,int sum,bool lead,bool limit){
+ll dfs(int pos,int sum,bool lead,bool limit){//lead前导0，limit最高位受限
     ll ans=0;
     if(pos==0)return sum;
     if(!lead&&!limit&&dp[pos][sum]!=-1)return dp[pos][sum];
@@ -31,3 +31,7 @@ int main(){
     for(int i=0;i<10;i++)now=i,cout<<solve(b)-solve(a-1)<<" ";
     return 0;
 }
+//问题：区间内统计各个数字出现的次数
+//思路：核心dfs,实现各个位置填充每个dp[][],这里利用的是ans，最后一位sum
+//如果有，直接用dp,其他都是限制条件
+//注意事项：limit为最高位限制，最高位选择了最大时，其他位置也要受限
