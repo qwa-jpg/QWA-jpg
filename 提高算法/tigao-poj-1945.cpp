@@ -1,7 +1,4 @@
-#include<cstdio>
-#include<queue>
-#include<map>
-#include<algorithm>
+#include<bits/stdc++.h>
 using namespace std;
 struct Node{
     int a,b,g,h;
@@ -10,7 +7,7 @@ struct Node{
 };
 int P;
 const int LIMIT=100000;
-int calc_h(int a,int b){
+int calc_h(int a,int b){//启发函数
     int m=max(a,b);
     if(m>=P)return 0;
     int cnt=0;
@@ -28,7 +25,7 @@ int astar(){
         Node cur=pq.top();pq.pop();
         int a=cur.a,b=cur.b,g=cur.g;
         if(a==P||b==P)return g;
-        auto it=best.find({a,b});
+        auto it=best.find({a,b});//best最小剪枝
         if(it!=best.end()&&it->second<g)continue;
         int next_states[8][2]={
             {2*a,b},{a,2*a},
@@ -58,3 +55,6 @@ int main(){
     printf("%d\\n",astar());
     return 0;
 }
+//问题：四种a,b的变化方式，如何最少步数到达p
+//思路：优化算法，采用预估2倍到达最少的数优先；
+//另外还有三种剪枝，分别是最大上限，best最小状态剪枝，目标终止剪枝
