@@ -42,16 +42,14 @@ int times[N];
 int astar(int s,int t,int k){
     memset(times,0,sizeof(times));
     priority_queue<point>q;
-    q.push(point(s,0,0));
+    q.push(point(s,0,dist[s]));
     int best_k=INF;
     while(!q.empty()){
         point p=q.top();q.pop();
 		if(times[p.v] > k) continue;//超过k次不在扩展邻边
-		if(p.g + p.h >= best_k) continue;//剪掉
         times[p.v]++;
         if(p.v == t) {
 		    if(times[p.v] == k) return p.g;//第k次出队,直接返回答案
-		    best_k = p.g;//否则更新当前第i短路长度
 		}
         for(int i=0;i<G[p.v].size();i++){
             edge y=G[p.v][i];
