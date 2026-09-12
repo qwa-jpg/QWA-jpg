@@ -7,13 +7,18 @@
 输入：第1行输入两个整数n和m(1≤n≤200000, 1≤m≤40000)，表示n个整数，m组数据。第2~m+1行中，每行输入3个整数a_i, b_i, v_i，表示[a_i, b_i]区间和为v_i，0≤a_i≤b_i≤n。
 
 输出：输出一个整数，表示冲突数据的个数。*/
+// 例 4.2 How many answers are wrong (hdu 3038)
+// 带权并查集：维护前缀和关系 s[b] - s[a] = v
+//   区间和 [a,b] = v  <==>  s[b] - s[a-1] = v，故合并时传入 a-1
+//   d[x] = s[fa[x]] - s[x]，即 x 到其父节点的"前缀和差"
+//   同根时检验 d[a] - d[b] == v（即 s[b] - s[a] == v）
 #include <bits/stdc++.h>
 using namespace std;
 
 const int MAXN = 200005;
 int n, m;
 int fa[MAXN];
-int d[MAXN]; // 权值，记录当前节点到根节点的距离
+int d[MAXN]; // 权值，记录 s[fa[x]] - s[x]（s 为前缀和）
 int ans;
 
 void init_set() {
@@ -22,9 +27,9 @@ void init_set() {
 
 int find_set(int x) {
     if(x != fa[x]) {
-        int t = fa[x]; // 记录父节点
-        fa[x] = find_set(fa[x]); // 路径压缩，递归最后返回的是根节点
-        d[x] += d[t]; // 权值更新为 x 到根节点的权值
+        int t = fa[x];              // 记录父节点
+        fa[x] = find_set(fa[x]);    // 路径压缩，递归最后返回的是根节点
+        d[x] += d[t];               // 权值更新为 x 到根节点的权值
     }
     return fa[x];
 }
@@ -32,10 +37,10 @@ int find_set(int x) {
 void merge_set(int a, int b, int v) {
     int roota = find_set(a), rootb = find_set(b);
     if(roota == rootb) {
-        if(d[a] - d[b] != v) ans++;
+        if(d[a] - d[b] != v) ans++; // 同根：检验 s[b] - s[a] 是否等于 v
     } else {
-        fa[roota] = rootb; // 合并
-        d[roota] = d[b] - d[a] + v;
+        fa[roota] = rootb;          // 合并
+        d[roota] = d[b] - d[a] + v; // 使 s[b] - s[a] = v 成立
     }
 }
 
@@ -46,7 +51,7 @@ int main() {
         while(m--) {
             int a, b, v;
             scanf("%d%d%d", &a, &b, &v);
-            merge_set(a, b, v);
+            merge_set(a - 1, b, v); // 关键修正：区间和 [a,b]=v 对应前缀 s[b]-s[a-1]=v
         }
         printf("%d\n", ans);
     }
