@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
-const int INF=0x3f3f3f3f;
+const int INF=0x3f3f3f3f;//1e9
 int m,n;
 int g[105][105];
 int dist[105][105][2];
