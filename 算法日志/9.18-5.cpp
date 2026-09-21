@@ -18,49 +18,56 @@
  
 输出最少变换步数；超过10步输出 ?NO ANSWER!
 */
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <algorithm>
-#include <queue>
-#include <unordered_map>
+#include <bits/stdc++.h>
 using namespace std;
-const int N = 6;
-int n;
-string a[N], b[N];
-int extend(queue <string>&q, unordered_map <string, int>&da, unordered_map <string, int>&db, string a[], string b[]){
-     string t = q.front();
-  q.pop();
-   for (int i = 0; i < t.size(); i ++) 
-      for (int j = 0; j < n; j ++)
-    if (t.substr(i, a[j].size()) == a[j]){
-     string state = t.substr(0, i) +b[j] + t.substr(i + a[j].size());
-     if(db.count(state))   return da[t] + 1 + db[state];
-     if(da.count(state))   continue;
-     da[state] = da[t] + 1;
-     q.push(state);
-    } 
-  return 11;
+
+string A, B;
+vector<string> from, to;
+
+// 单侧 BFS：从 start 出发做 src->dst 的替换
+// me: 本侧距离表, other: 对侧距离表(可能为空), 返回遇到的最短总步数
+int bfsOne(const string& start, const vector<string>& src,
+           const vector<string>& dst,
+           unordered_map<string, int>& me, unordered_map<string, int>& other) {
+    queue<string> q;
+    me[start] = 0;
+    q.push(start);
+    int best = 11;                        // >10 视为无解
+    while (!q.empty()) {
+        string s = q.front(); q.pop();
+        int d = me[s];
+        if (d == 5) continue;             // 每侧最多 5 层，两侧合计 <= 10
+        for (int i = 0; i < (int)src.size(); i++) {
+            for (size_t pos = 0; (pos = s.find(src[i], pos)) != string::npos; pos++) {
+                string t = s.substr(0, pos) + dst[i] + s.substr(pos + src[i].size());
+                if (me.count(t)) continue;
+                if (other.count(t)) {     // 与对侧相遇 -> 记录总步数
+                    best = min(best, d + 1 + other[t]);
+                } else {
+                    me[t] = d + 1;
+                    q.push(t);
+                }
+            }
+        }
+    }
+    return best;
 }
-int bfs(string A,string B){
- queue <string> qa,qb;
- unordered_map <string, int> da,db;
- qa.push(A),      da[A] = 0;
- qb.push(B),      db[B] = 0;
-  while(qa.size() && qb.size()){
-  int t;
-  if (qa.size() < qb.size())    t = extend(qa, da, db, a, b);
-  else    t = extend(qb, db, da, b, a);
-  if (t <= 10)    return  t;
- }
- return 11;
-}
-int main(){
- string A, B;
- cin >> A >> B;
- while (cin >> a[n] >> b[n])    n ++;
- int step = bfs(A, B);
- if (step > 10)     puts("NO ANSWER!");
- else               printf("%d\n", step);
- return 0;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    cin >> A >> B;
+    string x, y;
+    while (cin >> x >> y) { from.push_back(x); to.push_back(y); }
+
+    if (A == B) { cout << 0 << '\n'; return 0; }
+
+    unordered_map<string, int> d1, d2;
+    bfsOne(A, from, to, d1, d2);              // 正向：填 d1（此时 d2 空，无相遇）
+    int ans = bfsOne(B, to, from, d2, d1);    // 反向：填 d2 并检测相遇
+
+    if (ans <= 10) cout << ans << '\n';
+    else cout << "NO ANSWER!" << '\n';
+    return 0;
 }
