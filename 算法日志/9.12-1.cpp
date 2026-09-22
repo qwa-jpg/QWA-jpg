@@ -51,7 +51,7 @@ int main() {
         while(m--) {
             int a, b, v;
             scanf("%d%d%d", &a, &b, &v);
-            merge_set(a - 1, b, v); // 关键修正：区间和 [a,b]=v 对应前缀 s[b]-s[a-1]=v
+            merge_set(a, b, v); // 关键修正：区间和 [a,b]=v 对应前缀 s[b]-s[a-1]=v
         }
         printf("%d\n", ans);
     }
